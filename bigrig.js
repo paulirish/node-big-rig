@@ -116,6 +116,8 @@ function prettyPrint (result, indent, frameCount) {
   indent = indent || 0;
   frameCount = frameCount || 1;
 
+  var barHorizontal = require('bar-horizontal');
+
   var paddingDistance = 40;
   var labelPadding = padOut('', indent);
   var keys = Object.keys(result);
@@ -125,6 +127,12 @@ function prettyPrint (result, indent, frameCount) {
   var value;
   var suffix;
   var perFrameValue;
+  var coreValues = {};
+
+  function cleanProp (obj, prop) {
+    coreValues[prop] = obj[prop];
+    delete obj[prop];
+  }
 
   function padOut (str, len) {
 
@@ -141,6 +149,35 @@ function prettyPrint (result, indent, frameCount) {
     console.log(labelPadding + '{}');
   }
 
+  if (result && result[0]) {
+    var rawTot = JSON.parse(JSON.stringify(result))[0];
+    console.log(colorFn('\nRaw Totals'));
+    barHorizontal(rawTot.rawTotals, {labels: true});
+
+    // log the non-basic details
+    var timelineTot = Object.assign(rawTot);
+    delete timelineTot.rawTotals;
+    cleanProp(timelineTot, 'extendedInfo')
+    cleanProp(timelineTot, 'start');
+    cleanProp(timelineTot, 'end');
+    cleanProp(timelineTot, 'duration');
+    cleanProp(timelineTot, 'fps');
+    cleanProp(timelineTot, 'frameCount');
+    cleanProp(timelineTot, 'title');
+    cleanProp(timelineTot, 'type');
+    console.log(colorFn('\nTimeline Category Totals'));
+    barHorizontal(timelineTot, {labels: true});
+
+
+    console.log(colorFn('\nDetails'))
+  }
+  // console.log(result);
+  // result = [coreValues];
+// console.log('hi', result)
+// console.log('byte', coreValues)
+
+
+  // go do the rest
   for (var k = 0; k < keys.length; k++) {
 
     perFrameValue = undefined;
