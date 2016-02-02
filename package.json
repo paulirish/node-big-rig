@@ -10,10 +10,9 @@
     "node": ">=4.0.0"
   },
   "dependencies": {
-    "bar-horizontal": "^0.2.1",
+    "bar-horizontal": "git://github.com/paulirish/bar-horizontal.git#values-not-percentages",
     "cli-color": "^1.1.0",
     "mkdirp": "^0.5.1",
-    "object.values": "^1.0.3",
     "yargs": "^3.29.0"
   },
   "devDependencies": {
